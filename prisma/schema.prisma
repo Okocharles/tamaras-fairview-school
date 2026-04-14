@@ -1,0 +1,485 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  CLASS_TEACHER
+  SUBJECT_TEACHER
+  BURSAR
+  DISCOVERY_INSTRUCTOR
+  PARENT
+  STUDENT
+}
+
+enum DivisionType {
+  NURSERY_PRIMARY
+  HIGH_SCHOOL
+  DISCOVERY
+}
+
+enum StaffType {
+  ACADEMIC
+  NON_ACADEMIC
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum FeeStatus {
+  PENDING
+  PARTIAL
+  PAID
+  WAIVED
+  OVERDUE
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum ExamStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  SUBMITTED
+  GRADED
+}
+
+enum LessonNoteStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model SchoolDivision {
+  id               String   @id @default(uuid())
+  name             String
+  type             DivisionType
+  curriculumLevel  String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  staff            Staff[]
+  students         Student[]
+  classes          Class[]
+  subjects         Subject[]
+  feeSchedules     FeeSchedule[]
+}
+
+model AcademicSession {
+  id        String   @id @default(uuid())
+  name      String   // e.g. "2024/2025"
+  yearStart Int
+  yearEnd   Int
+  isCurrent Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  terms         Term[]
+  classSubjects ClassSubject[]
+}
+
+model Term {
+  id         String   @id @default(uuid())
+  sessionId  String
+  session    AcademicSession @relation(fields: [sessionId], references: [id])
+  termNumber Int
+  startDate  DateTime
+  endDate    DateTime
+  isCurrent  Boolean  @default(false)
+
+  results       Result[]
+  exams         CbtExam[]
+  lessonNotes   LessonNote[]
+  assignments   Assignment[]
+  feeSchedules  FeeSchedule[]
+  studentFees   StudentFee[]
+  classSubjects ClassSubject[]
+}
+
+model Staff {
+  id               String   @id @default(uuid())
+  userId           String   @unique // Linked to Supabase Auth uid
+  divisionId       String
+  division         SchoolDivision @relation(fields: [divisionId], references: [id])
+  employeeNumber   String   @unique
+  firstName        String
+  lastName         String
+  email            String   @unique
+  phone            String?
+  role             Role
+  staffType        StaffType
+  qualification    String?
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  classesTeached Class[]        @relation("ClassTeacher")
+  classSubjects  ClassSubject[]
+  lessonNotes    LessonNote[]
+  exams          CbtExam[]
+  assignments    Assignment[]
+}
+
+model Class {
+  id             String   @id @default(uuid())
+  divisionId     String
+  division       SchoolDivision @relation(fields: [divisionId], references: [id])
+  classTeacherId String?
+  classTeacher   Staff?   @relation("ClassTeacher", fields: [classTeacherId], references: [id])
+  name           String
+  level          String
+  capacity       Int?
+  arm            String?
+  createdAt      DateTime @default(now())
+
+  students      Student[]
+  classSubjects ClassSubject[]
+  results       Result[]
+  lessonNotes   LessonNote[]
+  assignments   Assignment[]
+  exams         CbtExam[]
+}
+
+model Subject {
+  id          String   @id @default(uuid())
+  divisionId  String
+  division    SchoolDivision @relation(fields: [divisionId], references: [id])
+  name        String
+  code        String
+  nerdcCode   String?
+  category    String?
+  isCore      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  classSubjects ClassSubject[]
+  results       Result[]
+  lessonNotes   LessonNote[]
+  assignments   Assignment[]
+  exams         CbtExam[]
+}
+
+model ClassSubject {
+  id        String   @id @default(uuid())
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  sessionId String
+  session   AcademicSession @relation(fields: [sessionId], references: [id])
+  termId    String
+  term      Term     @relation(fields: [termId], references: [id])
+
+  @@unique([classId, subjectId, sessionId, termId])
+}
+
+model Student {
+  id              String   @id @default(uuid())
+  userId          String   @unique // Linked to Supabase Auth uid
+  divisionId      String
+  division        SchoolDivision @relation(fields: [divisionId], references: [id])
+  classId         String
+  class           Class    @relation(fields: [classId], references: [id])
+  admissionNumber String   @unique
+  firstName       String
+  lastName        String
+  middleName      String?
+  dateOfBirth     DateTime
+  gender          Gender
+  bloodGroup      String?
+  photoUrl        String?
+  isActive        Boolean  @default(true)
+  admissionDate   DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  parents        StudentParent[]
+  results        Result[]
+  cbtAttempts    CbtAttempt[]
+  studentFees    StudentFee[]
+  payments       Payment[]
+  submissions    AssignmentSubmission[]
+}
+
+model ParentGuardian {
+  id               String   @id @default(uuid())
+  userId           String   @unique // Linked to Supabase Auth uid
+  firstName        String
+  lastName         String
+  email            String   @unique
+  phone            String
+  occupation       String?
+  relationshipType String?
+  address          String?
+  createdAt        DateTime @default(now())
+
+  students StudentParent[]
+  payments Payment[]
+}
+
+model StudentParent {
+  id                String   @id @default(uuid())
+  studentId         String
+  student           Student  @relation(fields: [studentId], references: [id])
+  parentId          String
+  parent            ParentGuardian @relation(fields: [parentId], references: [id])
+  isPrimaryContact  Boolean  @default(false)
+
+  @@unique([studentId, parentId])
+}
+
+model Result {
+  id        String   @id @default(uuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  termId    String
+  term      Term     @relation(fields: [termId], references: [id])
+  sessionId String
+  session   AcademicSession @relation(fields: [sessionId], references: [id])
+  
+  ca1Score    Float?   @default(0)
+  ca2Score    Float?   @default(0)
+  ca3Score    Float?   @default(0)
+  examScore   Float?   @default(0)
+  totalScore  Float?   @default(0)
+  grade       String?
+  remark      String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@unique([studentId, subjectId, termId, sessionId])
+}
+
+model LessonNote {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  termId    String
+  term      Term     @relation(fields: [termId], references: [id])
+  
+  title      String
+  weekNumber Int
+  content    String?  @db.Text
+  fileUrl    String?
+  status     LessonNoteStatus @default(DRAFT)
+  createdAt  DateTime @default(now())
+}
+
+model Assignment {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  termId    String
+  term      Term     @relation(fields: [termId], references: [id])
+  
+  title       String
+  description String?  @db.Text
+  dueDate     DateTime
+  totalMarks  Int
+  createdAt   DateTime @default(now())
+
+  submissions AssignmentSubmission[]
+}
+
+model AssignmentSubmission {
+  id           String   @id @default(uuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id])
+  
+  submissionText String? @db.Text
+  fileUrl        String?
+  score          Float?
+  feedback       String? @db.Text
+  submittedAt    DateTime @default(now())
+
+  @@unique([assignmentId, studentId])
+}
+
+model CbtExam {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  termId    String
+  term      Term     @relation(fields: [termId], references: [id])
+  
+  title            String
+  durationMinutes  Int
+  totalQuestions   Int
+  totalMarks       Int
+  shuffleQuestions Boolean @default(true)
+  shuffleOptions   Boolean @default(true)
+  startTime        DateTime
+  endTime          DateTime
+  status           ExamStatus @default(DRAFT)
+  createdAt        DateTime @default(now())
+
+  questions CbtQuestion[]
+  attempts  CbtAttempt[]
+}
+
+model CbtQuestion {
+  id      String   @id @default(uuid())
+  examId  String
+  exam    CbtExam  @relation(fields: [examId], references: [id])
+  
+  questionText String   @db.Text
+  questionType String   // MCQ, True/False, Fill-blank
+  imageUrl     String?
+  marks        Int      @default(1)
+  orderIndex   Int
+
+  options CbtOption[]
+  answers CbtAnswer[]
+}
+
+model CbtOption {
+  id         String   @id @default(uuid())
+  questionId String
+  question   CbtQuestion @relation(fields: [questionId], references: [id])
+  
+  optionText  String  @db.Text
+  isCorrect   Boolean @default(false)
+  optionLabel String? // A, B, C, D
+
+  selectedIn CbtAnswer[]
+}
+
+model CbtAttempt {
+  id        String   @id @default(uuid())
+  examId    String
+  exam      CbtExam  @relation(fields: [examId], references: [id])
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  
+  startedAt   DateTime @default(now())
+  submittedAt DateTime?
+  totalScore  Float?
+  percentage  Float?
+  status      AttemptStatus @default(IN_PROGRESS)
+  isGraded    Boolean @default(false)
+
+  answers CbtAnswer[]
+
+  @@unique([examId, studentId])
+}
+
+model CbtAnswer {
+  id        String   @id @default(uuid())
+  attemptId String
+  attempt   CbtAttempt @relation(fields: [attemptId], references: [id])
+  questionId String
+  question   CbtQuestion @relation(fields: [questionId], references: [id])
+  
+  selectedOptionId String?
+  selectedOption   CbtOption? @relation(fields: [selectedOptionId], references: [id])
+  isCorrect        Boolean?
+  marksAwarded     Float?
+
+  @@unique([attemptId, questionId])
+}
+
+model FeeSchedule {
+  id              String   @id @default(uuid())
+  divisionId      String
+  division        SchoolDivision @relation(fields: [divisionId], references: [id])
+  sessionId       String
+  termId          String
+  term            Term     @relation(fields: [termId], references: [id])
+  
+  classLevel      String   // e.g. "Primary 1"
+  feeType         String   // Tuition, Bus, etc.
+  feeName         String
+  amount          Float
+  dueDate         DateTime
+  isMandatory     Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  studentFees StudentFee[]
+}
+
+model StudentFee {
+  id            String   @id @default(uuid())
+  studentId     String
+  student       Student  @relation(fields: [studentId], references: [id])
+  feeScheduleId String
+  feeSchedule   FeeSchedule @relation(fields: [feeScheduleId], references: [id])
+  termId        String
+  term          Term     @relation(fields: [termId], references: [id])
+  
+  amountDue   Float
+  amountPaid  Float @default(0)
+  outstanding Float // Computed logic will be in DB trigger or Server Action
+  status      FeeStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+
+  payments Payment[]
+
+  @@unique([studentId, feeScheduleId, termId])
+}
+
+model Payment {
+  id           String   @id @default(uuid())
+  studentFeeId String
+  studentFee   StudentFee @relation(fields: [studentFeeId], references: [id])
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id])
+  parentId     String?
+  parent       ParentGuardian? @relation(fields: [parentId], references: [id])
+  
+  amount           Float
+  paymentMethod    String // CASH, ONLINE, TRANSFER
+  gatewayReference String? @unique
+  gatewayName      String? // Paystack, Flutterwave
+  status           PaymentStatus @default(PENDING)
+  paymentDate      DateTime @default(now())
+  receiptNumber    String? @unique
+  createdAt        DateTime @default(now())
+}
+
+model Notification {
+  id            String   @id @default(uuid())
+  senderId      String?
+  recipientType String   // ALL, STAFF, PARENT, STUDENT, INDIVIDUAL
+  recipientId   String?  // If individual
+  channel       String   // IN_APP, SMS, EMAIL
+  subject       String
+  message       String   @db.Text
+  isRead        Boolean  @default(false)
+  status        String?  // sent, failed
+  createdAt     DateTime @default(now())
+}
