@@ -113,7 +113,7 @@ export default function FinancialDashboard() {
                 <Tooltip 
                   cursor={{fill: '#F8FAFC'}}
                   contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'}}
-                  formatter={(value: number) => [formatNaira(value), "Amount"]}
+                  formatter={(value: any) => [formatNaira(Number(value)), "Amount"]}
                 />
                 <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
                   {revenueData.map((entry, index) => (
