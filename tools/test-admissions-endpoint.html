@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Test Admissions Endpoint</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 60px auto; padding: 0 20px; color: #111827; }
+  h1 { font-size: 20px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+  input, textarea { width: 100%; padding: 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+  button { margin-top: 16px; padding: 12px; width: 100%; background: #D97706; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: default; }
+  #result { margin-top: 16px; padding: 12px; border-radius: 6px; font-size: 13px; display: none; }
+  .ok { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+  .fail { background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+</style>
+</head>
+<body>
+  <h1>Test: Tamara's Fairview Admissions Endpoint</h1>
+  <p style="font-size:13px;color:#6B7280;">
+    Open this file directly in your browser (double-click it, no server needed).
+    It sends a real test row straight to your Google Sheet, completely outside
+    any sandboxed preview — so if a row shows up after clicking Submit, your
+    Apps Script deployment is working correctly.
+  </p>
+
+  <form id="testForm">
+    <label>Student Name</label>
+    <input id="studentName" value="Test Student" required />
+
+    <label>Parent Name</label>
+    <input id="parentName" value="Test Parent" required />
+
+    <label>Phone</label>
+    <input id="parentPhone" value="08000000000" required />
+
+    <label>Section</label>
+    <input id="section" value="Discovery" />
+
+    <button type="submit" id="submitBtn">Send Test Row</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbxWCxo8PR1UfgMan9CpvDLeYauso0K5FMlzd1m_6Hidgq_Bs9Eil8Qkw_zpmb0nWK8b/exec";
+
+    document.getElementById("testForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("submitBtn");
+      const result = document.getElementById("result");
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+      result.style.display = "none";
+
+      const payload = {
+        submittedAt: new Date().toISOString(),
+        studentName: document.getElementById("studentName").value,
+        dob: "",
+        section: document.getElementById("section").value,
+        parentName: document.getElementById("parentName").value,
+        parentPhone: document.getElementById("parentPhone").value,
+        parentEmail: "",
+        message: "This is a test submission from test-admissions-endpoint.html",
+      };
+
+      try {
+        await fetch(ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify(payload),
+        });
+        result.className = "ok";
+        result.textContent = "Request sent without a network error. Now check your Google Sheet for a new row — that's the real confirmation.";
+      } catch (err) {
+        result.className = "fail";
+        result.textContent = "Request failed: " + err.message + ". This means the endpoint itself has an issue (check the deployment settings), not the sandbox.";
+      }
+      result.style.display = "block";
+      btn.disabled = false;
+      btn.textContent = "Send Test Row";
+    });
+  </script>
+</body>
+</html>
