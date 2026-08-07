@@ -206,11 +206,32 @@ export const STAFF: StaffMember[] = [
       "\"I started this school on a simple belief: that a child taught with both discipline and warmth grows into an adult who leads with both. Every classroom we build still carries that founding purpose.\"",
   },
   {
+    name: "Mr. Vincent Dadi",
+    role: "Principal, High School",
+    photo: "/images/staff/principal-vincent-dadi.jpg",
+    narration:
+      "\"Running a high school means holding two things at once — high expectations and genuine care. I want every student here to feel both challenged and known.\"",
+  },
+  {
     name: "Mrs. Hannah Akinade",
     role: "Head Teacher",
     photo: "/images/staff/head-teacher-hannah-akinade.jpg",
     narration:
       "\"The early years set the tone for everything that follows. I see my role as making sure every teacher in my care has the tools and encouragement to make each child feel capable, seen, and genuinely excited to learn.\"",
+  },
+  {
+    name: "Mr. Stephen Farinola",
+    role: "Vice Principal, Academics",
+    photo: "/images/staff/vp-academics-stephen-farinola.jpg",
+    narration:
+      "\"Academic excellence isn't about pressure, it's about preparation. I work to make sure every learner walks into an exam room having already done the hard part — the consistent, well-guided work that comes before it.\"",
+  },
+  {
+    name: "Mr. Dokduna Gorip",
+    role: "Vice Principal, Admin",
+    photo: "/images/staff/vp-admin-dokduna-gorip.jpg",
+    narration:
+      "\"A school runs on the things nobody notices until they go wrong. My job is to keep those things — schedules, resources, day-to-day order — running so quietly that teachers can just focus on teaching.\"",
   },
   {
     name: "Mrs. Blessing Ini",
@@ -227,18 +248,46 @@ export const STAFF: StaffMember[] = [
       "\"Preschool is where curiosity either gets nurtured or dampened. My job is to protect that curiosity — through play, patience, and a classroom where it's always safe to ask 'why?'\"",
   },
   {
-    name: "Mr. Stephen Farinola",
-    role: "Vice Principal, Academics",
-    photo: "/images/staff/vp-academics-stephen-farinola.jpg",
-    narration:
-      "\"Academic excellence isn't about pressure, it's about preparation. I work to make sure every learner walks into an exam room having already done the hard part — the consistent, well-guided work that comes before it.\"",
-  },
-  {
-    name: "Mr. Alex",
+    name: "Mr. Dikon Nanbal Alex",
     role: "HOD, Chemistry",
     photo: "/images/staff/hod-chemistry-alex.jpg",
     narration:
       "\"Chemistry clicks when students stop memorizing and start observing. I build my lessons around the lab bench, not the textbook, because that's where the subject actually comes alive.\"",
+  },
+  {
+    name: "Engr. Barthlomeu Ogah",
+    role: "HOD, Physics",
+    photo: "/images/staff/hod-physics-barthlomeu-ogah.jpg",
+    narration:
+      "\"Physics is just the world explaining itself, if you're patient enough to listen. I want my students to leave every class seeing the everyday differently — not just solving for x.\"",
+  },
+  {
+    name: "Mr. Semion",
+    role: "HOD, Biology",
+    photo: "/images/staff/hod-biology-semion.jpg",
+    narration:
+      "\"Biology rewards curiosity more than memorization. I push my students to ask what a living system is trying to do — once you see that, the details start making sense on their own.\"",
+  },
+  {
+    name: "Mr. Iliya",
+    role: "HOD, English Language",
+    photo: "/images/staff/hod-english-iliya.jpg",
+    narration:
+      "\"Language is the tool every other subject depends on. I take that seriously — a student who can read closely and write clearly has an advantage that follows them everywhere.\"",
+  },
+  {
+    name: "Mr. Titus Longji",
+    role: "HOD, French",
+    photo: "/images/staff/hod-french-titus-longji.jpg",
+    narration:
+      "\"Learning a new language is really learning to see the world through someone else's words. I try to make that feel like discovery, not drilling.\"",
+  },
+  {
+    name: "Mr. Ifanyi",
+    role: "ICT / Technical Department",
+    photo: "/images/staff/ict-td-ifanyi.jpg",
+    narration:
+      "\"Technology should feel like a tool students are comfortable with, not a subject they're afraid of. I focus on hands-on, practical skills they'll actually use.\"",
   },
 ];
 
