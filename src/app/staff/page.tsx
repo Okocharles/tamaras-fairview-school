@@ -22,7 +22,12 @@ export default function StaffPage() {
             <div key={person.name} className="rounded-xl overflow-hidden flex flex-col" style={{ border: `1px solid ${C.line}` }}>
               <div className="aspect-[4/5] w-full" style={{ background: C.fog }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={person.photo} alt={person.name} className="w-full h-full object-cover" />
+                <img
+                  src={person.photo}
+                  alt={person.name}
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: "center 15%" }}
+                />
               </div>
               <div className="p-5 flex-1 flex flex-col">
                 <div className="font-bold text-sm mb-0.5" style={{ color: C.navy900, fontFamily: "Playfair Display, serif" }}>{person.name}</div>
