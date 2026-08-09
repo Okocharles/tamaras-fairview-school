@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { C } from "@/lib/colors";
 import { PageHero, SectionHeading } from "@/components/UI";
+import GalleryCarousel from "@/components/GalleryCarousel";
+import { ABOUT_GALLERY } from "@/lib/data";
 
 export default function AboutPage() {
   const [openRule, setOpenRule] = useState(0);
@@ -74,6 +76,11 @@ export default function AboutPage() {
               </span>
             </button>
           ))}
+        </div>
+
+        <div className="mt-16">
+          <SectionHeading eyebrow="A Look Around" title="School Gallery" sub="Moments from classrooms, labs, and campus life." />
+          <GalleryCarousel photos={ABOUT_GALLERY} />
         </div>
       </section>
     </div>

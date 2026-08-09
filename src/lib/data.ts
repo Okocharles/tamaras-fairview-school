@@ -357,6 +357,16 @@ export const EXPECTATIONS = [
   },
 ];
 
+export const HOME_HERO_PHOTO = "/images/hero-home-classroom.jpg";
+
+export const ABOUT_GALLERY: { src: string; caption: string }[] = [
+  { src: "/images/about/about-gallery-presentation.jpg", caption: "A student leads a class presentation" },
+  { src: "/images/about/about-gallery-chem-lab.jpg", caption: "Hands-on chemistry practical" },
+  { src: "/images/about/about-gallery-hardware-lesson.jpg", caption: "Learning computer hardware together" },
+  { src: "/images/about/about-gallery-ict-lab.jpg", caption: "ICT lab session" },
+  { src: "/images/about/about-gallery-3d-logo.png", caption: "The Tamara's Fairview High School crest" },
+];
+
 export const CONTACTS = [
   { name: "Mrs. Osinamofan Oko", role: "Proprietress", phone: "07038532976" },
   { name: "Mrs. Hannah Akinade", role: "Head Teacher — Grade School", phone: "08131618327" },

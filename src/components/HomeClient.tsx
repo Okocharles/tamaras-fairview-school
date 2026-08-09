@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Shield, Award, Check, Users, Heart, Sparkles, ChevronRight } from "lucide-react";
 import { C } from "@/lib/colors";
-import { SECTIONS, logoForSection } from "@/lib/data";
+import { SECTIONS, logoForSection, HOME_HERO_PHOTO } from "@/lib/data";
 import { Eyebrow, SectionHeading, GoldButton, GhostButton } from "./UI";
 
 export default function HomeClient() {
@@ -24,7 +25,12 @@ export default function HomeClient() {
 
   return (
     <>
-      <section className="relative overflow-hidden" style={{ background: `linear-gradient(160deg, ${C.navy900} 0%, ${C.navy700} 100%)` }}>
+      <section className="relative overflow-hidden">
+        <Image src={HOME_HERO_PHOTO} alt="" fill priority sizes="100vw" className="object-cover" />
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(160deg, rgba(10,22,40,0.88) 0%, rgba(16,40,80,0.75) 100%)" }}
+        />
         <div className="max-w-6xl mx-auto px-5 md:px-8 py-24 md:py-32 relative z-10">
           <Eyebrow>Jos South LGA, Plateau State</Eyebrow>
           <h1 className="text-4xl md:text-6xl max-w-3xl leading-tight mb-6" style={{ fontFamily: "Playfair Display, serif", fontWeight: 700, color: C.white }}>
@@ -38,9 +44,6 @@ export default function HomeClient() {
             <Link href="/about"><GhostButton>Explore the School</GhostButton></Link>
           </div>
         </div>
-        <svg className="absolute -right-24 -bottom-24 opacity-20" width="480" height="480" viewBox="0 0 100 100">
-          <path d="M50 4 L90 16 V46 C90 72 72 90 50 98 C28 90 10 72 10 46 V16 Z" fill="none" stroke={C.gold400} strokeWidth="1.2" />
-        </svg>
       </section>
 
       <section style={{ background: C.gold500 }}>
