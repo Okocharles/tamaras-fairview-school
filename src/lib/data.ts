@@ -145,6 +145,14 @@ export const SECTIONS: SectionData[] = [
 
 export const CROSS_LINKS = SECTIONS.map((s) => ({ slug: s.slug, name: s.name }));
 
+// Two-tier logo system: Discovery, Nursery, and Grade School all use the
+// Grade School crest; Junior and Senior Secondary use the High School crest.
+export function logoForSection(slug: SectionSlug): string {
+  return slug === "junior-secondary" || slug === "senior-secondary"
+    ? "/images/logos/high-school-logo.png"
+    : "/images/logos/grade-school-logo.png";
+}
+
 export const GRADE_SCHOOL_GALLERY: { src: string; caption: string }[] = [
   { src: "/images/sections/grade-school/gs-hardware-lesson-1.jpg", caption: "Hands-on computer hardware lesson" },
   { src: "/images/sections/grade-school/gs-hardware-lesson-2.jpg", caption: "Working through the assignment together" },
@@ -188,6 +196,31 @@ export const NURSERY_GALLERY: { src: string; caption: string }[] = [
   { src: "/images/sections/nursery/nur-finished-craft.jpg", caption: "Showing off the finished craft" },
   { src: "/images/sections/nursery/nur-celebrating-together.jpg", caption: "Celebrating together" },
   { src: "/images/sections/nursery/nur-youngest-learners-smiles.jpg", caption: "The youngest learners, all smiles" },
+];
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  image: string;
+  body: string[];
+}
+
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: "jets-competition-national-win",
+    title: "Tamara's Fairview Students Win Top Honors at National JETS Competition",
+    date: "2026-01-15",
+    excerpt:
+      "Students from Tamara's Fairview High School represented Plateau State and won top honors at the National Junior Engineers, Technicians, and Scientists (JETS) Competition.",
+    image: "/images/blog/jets-competition-award.jpg",
+    body: [
+      "Students from Tamara's Fairview High School represented Plateau State and won top honors at the National Junior Engineers, Technicians, and Scientists (JETS) Competition — a proud moment for the school and for STEM education across the state.",
+      "The victorious students were received at the Government House in Rayfield, Jos, where they presented their plaque and award to Governor Mutfwang.",
+      "Governor Mutfwang commended the students for their innovation and outstanding representation of Plateau State on the national stage, reaffirming the state government's commitment to supporting STEM education and empowering young talent.",
+    ],
+  },
 ];
 
 export interface StaffMember {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Check, Star } from "lucide-react";
 import { C } from "@/lib/colors";
-import { SectionData, SECTIONS, CROSS_LINKS, GRADE_SCHOOL_GALLERY, HIGH_SCHOOL_GALLERY, NURSERY_GALLERY } from "@/lib/data";
+import { SectionData, SECTIONS, CROSS_LINKS, GRADE_SCHOOL_GALLERY, HIGH_SCHOOL_GALLERY, NURSERY_GALLERY, logoForSection } from "@/lib/data";
 import { PageHero, GoldButton } from "./UI";
 import GalleryCarousel from "./GalleryCarousel";
 import { useApply } from "./ApplyProvider";
@@ -13,12 +13,7 @@ export default function SectionTemplate({ s }: { s: SectionData }) {
   const [tab, setTab] = useState(0);
   const { openApply } = useApply();
 
-  const logoImage =
-    s.slug === "nursery" || s.slug === "grade-school"
-      ? "/images/logos/grade-school-logo.png"
-      : s.slug === "junior-secondary" || s.slug === "senior-secondary"
-      ? "/images/logos/high-school-logo.png"
-      : undefined;
+  const logoImage = logoForSection(s.slug);
 
   return (
     <div>

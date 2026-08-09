@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { Shield, Award, Check, Users, Heart, Sparkles, ChevronRight } from "lucide-react";
 import { C } from "@/lib/colors";
-import { SECTIONS } from "@/lib/data";
+import { SECTIONS, logoForSection } from "@/lib/data";
 import { Eyebrow, SectionHeading, GoldButton, GhostButton } from "./UI";
-import CrestBadge from "./CrestBadge";
 
 export default function HomeClient() {
   const stats = [
@@ -22,13 +21,6 @@ export default function HomeClient() {
     { icon: Users, t: "Responsibility", d: "Ownership, from staff to students." },
     { icon: Sparkles, t: "Compassion", d: "Care that meets every family with warmth." },
   ];
-
-  const logoFor = (slug: string) =>
-    slug === "nursery" || slug === "grade-school"
-      ? "/images/logos/grade-school-logo.png"
-      : slug === "junior-secondary" || slug === "senior-secondary"
-      ? "/images/logos/high-school-logo.png"
-      : null;
 
   return (
     <>
@@ -103,7 +95,7 @@ export default function HomeClient() {
         <SectionHeading eyebrow="Every Stage, One School" title="Explore Our Sections" sub="Each stage of a child's journey has its own home page, hero, and identity." />
         <div className="grid md:grid-cols-5 gap-4">
           {SECTIONS.map((s) => {
-            const logo = logoFor(s.slug);
+            const logo = logoForSection(s.slug);
             return (
               <Link
                 key={s.slug}
@@ -111,12 +103,8 @@ export default function HomeClient() {
                 className="text-left p-5 rounded-xl transition-transform hover:-translate-y-1 block"
                 style={{ background: C.white, border: `1px solid ${C.line}` }}
               >
-                {logo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={logo} alt={`${s.name} crest`} style={{ height: 40, width: "auto" }} />
-                ) : (
-                  <CrestBadge tier={s.logoTier} size={40} />
-                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={logo} alt={`${s.name} crest`} style={{ height: 40, width: "auto" }} />
                 <div className="font-bold text-sm mt-3 mb-1" style={{ color: C.navy900, fontFamily: "Playfair Display, serif" }}>{s.name}</div>
                 <div className="text-xs mb-3" style={{ color: C.mute }}>{s.ageGroup}</div>
                 <div className="flex items-center gap-1 text-xs font-semibold" style={{ color: C.gold600 }}>
