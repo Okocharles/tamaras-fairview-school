@@ -207,6 +207,16 @@ export interface BlogPost {
   body: string[];
 }
 
+export const HOME_HERO_PHOTO = "/images/hero-home-classroom.jpg";
+
+export const HOME_GALLERY: { src: string; caption: string }[] = [
+  { src: "/images/home/home-gallery-chem-lab.jpg", caption: "Hands-on science in the lab" },
+  { src: "/images/home/home-gallery-projector-class.jpg", caption: "Classroom learning, screen-led lessons" },
+  { src: "/images/home/home-gallery-hardware-lesson.jpg", caption: "Hands-on computer hardware lesson" },
+  { src: "/images/home/home-gallery-computer-lab.jpg", caption: "ICT lab session" },
+  { src: "/images/home/home-gallery-tfhs-3d-logo.png", caption: "Tamara's Fairview High School crest" },
+];
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "jets-competition-national-win",
@@ -355,16 +365,6 @@ export const EXPECTATIONS = [
     behavioral: ["Model leadership and responsibility as senior students", "Adhere to examination integrity standards", "Engage in community and co-curricular service"],
     psychomotor: ["Demonstrate proficiency in advanced lab techniques", "Represent the school in sports and co-curricular activities", "Maintain consistent personal presentation standards"],
   },
-];
-
-export const HOME_HERO_PHOTO = "/images/hero-home-classroom.jpg";
-
-export const ABOUT_GALLERY: { src: string; caption: string }[] = [
-  { src: "/images/about/about-gallery-presentation.jpg", caption: "A student leads a class presentation" },
-  { src: "/images/about/about-gallery-chem-lab.jpg", caption: "Hands-on chemistry practical" },
-  { src: "/images/about/about-gallery-hardware-lesson.jpg", caption: "Learning computer hardware together" },
-  { src: "/images/about/about-gallery-ict-lab.jpg", caption: "ICT lab session" },
-  { src: "/images/about/about-gallery-3d-logo.png", caption: "The Tamara's Fairview High School crest" },
 ];
 
 export const CONTACTS = [

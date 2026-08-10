@@ -4,8 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { Shield, Award, Check, Users, Heart, Sparkles, ChevronRight } from "lucide-react";
 import { C } from "@/lib/colors";
-import { SECTIONS, logoForSection, HOME_HERO_PHOTO } from "@/lib/data";
+import { SECTIONS, logoForSection, HOME_HERO_PHOTO, HOME_GALLERY } from "@/lib/data";
 import { Eyebrow, SectionHeading, GoldButton, GhostButton } from "./UI";
+import GalleryCarousel from "./GalleryCarousel";
 
 export default function HomeClient() {
   const stats = [
@@ -92,6 +93,11 @@ export default function HomeClient() {
             ))}
           </div>
         </div>
+      </section>
+
+      <section className="max-w-4xl mx-auto px-5 md:px-8 py-20">
+        <SectionHeading eyebrow="A Look Around" title="Life at Tamara's Fairview" sub="Moments from classrooms, labs, and campus life." />
+        <GalleryCarousel photos={HOME_GALLERY} />
       </section>
 
       <section className="max-w-6xl mx-auto px-5 md:px-8 py-20">
